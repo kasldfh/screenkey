@@ -83,6 +83,8 @@ def main():
                     help=_("Ignore the specified KeySym"))
     ap.add_argument("--compr-cnt", type=int, metavar='COUNT',
                     help=_("Compress key repeats after the specified count"))
+    ap.add_argument("--width", type=float, dest="width",
+                    help=_("Set width by ratio of monitor width (in range 0.0-1.0)"))
     args = ap.parse_args()
 
     # Set options
@@ -90,7 +92,7 @@ def main():
     for arg in ['timeout', 'position', 'persist', 'font_desc', 'font_color', 'bg_color',
                 'font_size', 'geometry', 'key_mode', 'bak_mode', 'mods_mode', 'mods_only',
                 'multiline', 'vis_shift', 'vis_space', 'screen', 'no_systray',
-                'opacity', 'ignore', 'compr_cnt']:
+                'opacity', 'ignore', 'compr_cnt', 'width']:
         if getattr(args, arg) is not None:
             options[arg] = getattr(args, arg)
 

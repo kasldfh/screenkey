@@ -53,7 +53,8 @@ class Screenkey(gtk.Window):
                             'vis_shift': False,
                             'vis_space': True,
                             'geometry': None,
-                            'screen': 0})
+                            'screen': 0,
+                            'width': 1})
         self.options = self.load_state()
         if self.options is None:
             self.options = defaults
@@ -194,12 +195,12 @@ class Screenkey(gtk.Window):
 
     def update_geometry(self, configure=False):
       #for now we don't want the first two if's to ever be true so we add the 1 == 0's. hacky...
-        if self.options.position == 'fixed' and self.options.geometry is not None and 1 == 0:
+        if self.options.position == 'fixed' and self.options.geometry is not None:
             self.move(*self.options.geometry[0:2])
             self.resize(*self.options.geometry[2:4])
             return
 
-        if self.options.geometry is not None and 1 == 0:
+        if self.options.geometry is not None:
             area_geometry = self.options.geometry
         else:
             geometry = self.get_screen().get_monitor_geometry(self.monitor)
@@ -214,7 +215,7 @@ class Screenkey(gtk.Window):
 
         #added division to only take a quarter of the screen
         #self.resize(area_geometry[2], window_height)
-        self.resize(int(area_geometry[2]/4), window_height)
+        self.resize(int(area_geometry[2] * self.options.width), window_height)
 
         if self.options.position == 'top':
             window_y = area_geometry[1] + area_geometry[3] // 10
@@ -223,9 +224,9 @@ class Screenkey(gtk.Window):
         else:
             window_y = area_geometry[1] + area_geometry[3] * 9 // 10 - window_height
 
-        #area_geometry[2[/2, then we need to offset by width of the window (which is area_geometry[2]/4 * 1/2 = area_geometry[2]/8
+        #area_geometry[2[/2 is center, then we need to offset by width of the window (which is area_geometry[2]/2 * width = area_geometry[2]/2width
         # self.move(area_geometry[0], window_y)
-        self.move(int(area_geometry[2] / 2 - area_geometry[2]/8), window_y)
+        self.move(int(area_geometry[2] / 2 - area_geometry[2] * self.options.width / 2), window_y)
 
 
     def on_statusicon_popup(self, widget, button, timestamp, data=None):

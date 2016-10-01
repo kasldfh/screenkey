@@ -193,12 +193,13 @@ class Screenkey(gtk.Window):
 
 
     def update_geometry(self, configure=False):
-        if self.options.position == 'fixed' and self.options.geometry is not None:
+      #for now we don't want the first two if's to ever be true so we add the 1 == 0's. hacky...
+        if self.options.position == 'fixed' and self.options.geometry is not None and 1 == 0:
             self.move(*self.options.geometry[0:2])
             self.resize(*self.options.geometry[2:4])
             return
 
-        if self.options.geometry is not None:
+        if self.options.geometry is not None and 1 == 0:
             area_geometry = self.options.geometry
         else:
             geometry = self.get_screen().get_monitor_geometry(self.monitor)
@@ -210,7 +211,10 @@ class Screenkey(gtk.Window):
             window_height = 12 * area_geometry[3] // 100
         else:
             window_height = 8 * area_geometry[3] // 100
-        self.resize(area_geometry[2], window_height)
+
+        #added division to only take a quarter of the screen
+        #self.resize(area_geometry[2], window_height)
+        self.resize(int(area_geometry[2]/4), window_height)
 
         if self.options.position == 'top':
             window_y = area_geometry[1] + area_geometry[3] // 10
@@ -218,7 +222,10 @@ class Screenkey(gtk.Window):
             window_y = area_geometry[1] + area_geometry[3] // 2 - window_height // 2
         else:
             window_y = area_geometry[1] + area_geometry[3] * 9 // 10 - window_height
-        self.move(area_geometry[0], window_y)
+
+        #area_geometry[2[/2, then we need to offset by width of the window (which is area_geometry[2]/4 * 1/2 = area_geometry[2]/8
+        # self.move(area_geometry[0], window_y)
+        self.move(int(area_geometry[2] / 2 - area_geometry[2]/8), window_y)
 
 
     def on_statusicon_popup(self, widget, button, timestamp, data=None):

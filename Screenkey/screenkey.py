@@ -54,7 +54,7 @@ class Screenkey(gtk.Window):
                             'vis_space': True,
                             'geometry': None,
                             'screen': 0,
-                            'width': 1})
+                            'width': 100})
         self.options = self.load_state()
         if self.options is None:
             self.options = defaults
@@ -194,7 +194,7 @@ class Screenkey(gtk.Window):
 
 
     def update_geometry(self, configure=False):
-      #for now we don't want the first two if's to ever be true so we add the 1 == 0's. hacky...
+        decimal_width = self.options.width / 100
         if self.options.position == 'fixed' and self.options.geometry is not None:
             self.move(*self.options.geometry[0:2])
             self.resize(*self.options.geometry[2:4])
@@ -215,7 +215,7 @@ class Screenkey(gtk.Window):
 
         #added division to only take a quarter of the screen
         #self.resize(area_geometry[2], window_height)
-        self.resize(int(area_geometry[2] * self.options.width), window_height)
+        self.resize(int(area_geometry[2] * decimal_width), window_height)
 
         if self.options.position == 'top':
             window_y = area_geometry[1] + area_geometry[3] // 10
@@ -226,7 +226,7 @@ class Screenkey(gtk.Window):
 
         #area_geometry[2[/2 is center, then we need to offset by width of the window (which is area_geometry[2]/2 * width = area_geometry[2]/2width
         # self.move(area_geometry[0], window_y)
-        self.move(int(area_geometry[2] / 2 - area_geometry[2] * self.options.width / 2), window_y)
+        self.move(int(area_geometry[2] / 2 - area_geometry[2] * decimal_width / 2), window_y)
 
 
     def on_statusicon_popup(self, widget, button, timestamp, data=None):
@@ -442,6 +442,9 @@ class Screenkey(gtk.Window):
         def on_adj_opacity_changed(widget, data=None):
             self.options.opacity = widget.get_value()
             self.update_colors()
+        def on_adj_width_changed(widget, data=None):
+            self.options.width = widget.get_value()
+            self.update_geometry()
 
         def on_font_color_changed(widget, data=None):
             self.options.font_color = widget.get_color().to_string()
@@ -580,10 +583,26 @@ class Screenkey(gtk.Window):
         hbox4_aspect.pack_start(lbl_opacity, expand=False, fill=False, padding=6)
         hbox4_aspect.pack_start(adj_scale, expand=True, fill=True, padding=4)
 
+        #opacity slider
+        hbox5_width = gtk.HBox()
+
+        lbl_width = gtk.Label(_("Width (%)"))
+        adj_width = gtk.Adjustment(self.options.opacity, 1, 100, 1, 0, 0)
+        adj_width.connect("value-changed", on_adj_width_changed)
+
+        adj_scale = gtk.HScale(adj_width)
+
+        hbox5_width.pack_start(lbl_width, expand=False, fill=False, padding=6)
+        hbox5_width.pack_start(adj_scale, expand=True, fill=True, padding=4)
+
+        #end opacity slider
+
+
         vbox_aspect.pack_start(hbox0_font)
         vbox_aspect.pack_start(hbox2_aspect)
         vbox_aspect.pack_start(hbox3_font_color)
         vbox_aspect.pack_start(hbox4_aspect)
+        vbox_aspect.pack_start(hbox5_width)
 
         frm_aspect.add(vbox_aspect)
 

@@ -194,7 +194,7 @@ class Screenkey(gtk.Window):
 
 
     def update_geometry(self, configure=False):
-        decimal_width = self.options.width / 100
+        decimal_width = self.options.width / 100 if self.options.width else 1
         if self.options.position == 'fixed' and self.options.geometry is not None:
             self.move(*self.options.geometry[0:2])
             self.resize(*self.options.geometry[2:4])

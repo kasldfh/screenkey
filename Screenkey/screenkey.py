@@ -531,6 +531,17 @@ class Screenkey(gtk.Window):
         btn_sel_geom.connect("clicked", on_btn_sel_geom)
         vbox_position.pack_start(btn_sel_geom)
 
+        hbox2_width = gtk.HBox()
+
+        lbl_width = gtk.Label(_("Width (%)"))
+        adj_width = gtk.Adjustment(self.options.opacity, 1, 100, 1, 0, 0)
+        adj_width.connect("value-changed", on_adj_width_changed)
+        adj_scale = gtk.HScale(adj_width)
+        hbox2_width.pack_start(lbl_width, expand=False, fill=False, padding=6)
+        hbox2_width.pack_start(adj_scale, expand=True, fill=True, padding=4)
+
+        vbox_position.pack_start(hbox2_width)
+
         frm_aspect = gtk.Frame("<b>%s</b>" % _("Aspect"))
         frm_aspect.set_border_width(4)
         frm_aspect.get_label_widget().set_use_markup(True)
@@ -548,7 +559,7 @@ class Screenkey(gtk.Window):
         hbox0_font.pack_start(lbl_font, expand=False, fill=False, padding=6)
         hbox0_font.pack_start(btn_font, expand=False, fill=False, padding=4)
 
-        hbox2_aspect = gtk.HBox()
+        hbox3_aspect = gtk.HBox()
 
         lbl_sizes = gtk.Label(_("Size"))
         cbox_sizes = gtk.combo_box_new_text()
@@ -558,10 +569,10 @@ class Screenkey(gtk.Window):
         cbox_sizes.set_active(FONT_SIZES.keys().index(self.options.font_size))
         cbox_sizes.connect("changed", on_cbox_sizes_changed)
 
-        hbox2_aspect.pack_start(lbl_sizes, expand=False, fill=False, padding=6)
-        hbox2_aspect.pack_start(cbox_sizes, expand=False, fill=False, padding=4)
+        hbox3_aspect.pack_start(lbl_sizes, expand=False, fill=False, padding=6)
+        hbox3_aspect.pack_start(cbox_sizes, expand=False, fill=False, padding=4)
 
-        hbox3_font_color = gtk.HBox()
+        hbox4_font_color = gtk.HBox()
 
         lbl_font_color = gtk.Label(_("Font color"))
         btn_font_color = gtk.ColorButton(color=gtk.gdk.color_parse(self.options.font_color))
@@ -569,40 +580,24 @@ class Screenkey(gtk.Window):
         btn_bg_color = gtk.ColorButton(color=gtk.gdk.color_parse(self.options.bg_color))
         btn_bg_color.connect("color-set", on_bg_color_changed)
 
-        hbox3_font_color.pack_start(lbl_font_color, expand=False, fill=False, padding=6)
-        hbox3_font_color.pack_start(btn_font_color, expand=False, fill=False, padding=4)
-        hbox3_font_color.pack_start(btn_bg_color, expand=False, fill=False, padding=4)
+        hbox4_font_color.pack_start(lbl_font_color, expand=False, fill=False, padding=6)
+        hbox4_font_color.pack_start(btn_font_color, expand=False, fill=False, padding=4)
+        hbox4_font_color.pack_start(btn_bg_color, expand=False, fill=False, padding=4)
 
-        hbox4_aspect = gtk.HBox()
+        hbox5_aspect = gtk.HBox()
 
         lbl_opacity = gtk.Label(_("Opacity"))
         adj_opacity = gtk.Adjustment(self.options.opacity, 0.1, 1.0, 0.1, 0, 0)
         adj_opacity.connect("value-changed", on_adj_opacity_changed)
         adj_scale = gtk.HScale(adj_opacity)
 
-        hbox4_aspect.pack_start(lbl_opacity, expand=False, fill=False, padding=6)
-        hbox4_aspect.pack_start(adj_scale, expand=True, fill=True, padding=4)
-
-        #opacity slider
-        hbox5_width = gtk.HBox()
-
-        lbl_width = gtk.Label(_("Width (%)"))
-        adj_width = gtk.Adjustment(self.options.opacity, 1, 100, 1, 0, 0)
-        adj_width.connect("value-changed", on_adj_width_changed)
-
-        adj_scale = gtk.HScale(adj_width)
-
-        hbox5_width.pack_start(lbl_width, expand=False, fill=False, padding=6)
-        hbox5_width.pack_start(adj_scale, expand=True, fill=True, padding=4)
-
-        #end opacity slider
-
+        hbox5_aspect.pack_start(lbl_opacity, expand=False, fill=False, padding=6)
+        hbox5_aspect.pack_start(adj_scale, expand=True, fill=True, padding=4)
 
         vbox_aspect.pack_start(hbox0_font)
-        vbox_aspect.pack_start(hbox2_aspect)
-        vbox_aspect.pack_start(hbox3_font_color)
-        vbox_aspect.pack_start(hbox4_aspect)
-        vbox_aspect.pack_start(hbox5_width)
+        vbox_aspect.pack_start(hbox3_aspect)
+        vbox_aspect.pack_start(hbox4_font_color)
+        vbox_aspect.pack_start(hbox5_aspect)
 
         frm_aspect.add(vbox_aspect)
 

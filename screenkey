@@ -84,7 +84,7 @@ def main():
     ap.add_argument("--compr-cnt", type=int, metavar='COUNT',
                     help=_("Compress key repeats after the specified count"))
     ap.add_argument("--width", type=float, dest="width",
-                    help=_("Set width by ratio of monitor width (in range 0.0-1.0)"))
+                    help=_("Set width by ratio of monitor width (in range 1-100)"))
     args = ap.parse_args()
 
     # Set options

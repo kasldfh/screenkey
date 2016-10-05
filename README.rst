@@ -82,6 +82,9 @@ Size:
   8/12/24% of the screen size. When "fixed" positioning is used, size is
   ignored and the font will fill the available height of the output window.
 
+Width:
+   Width of the output window. Set as a percentage (1-100) of the total screen wi   dth. Output window will be centered on screen. Defaults to 100.
+
 Keyboard mode:
   Choose the translation method of keyboard events.
 

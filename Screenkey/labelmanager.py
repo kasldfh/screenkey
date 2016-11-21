@@ -109,6 +109,7 @@ REPLACE_SYMS = {
 }
 
 WHITESPACE_SYMS = {'Tab', 'ISO_Left_Tab', 'Return', 'space', 'KP_Enter'}
+SPECIAL_CHARS = set(key for key in REPLACE_SYMS.keys() if 'space' not in key)
 
 MODS_MAP = {
     'normal': 0,
@@ -144,7 +145,7 @@ def keysym_to_mod(keysym):
 
 class LabelManager(object):
     def __init__(self, listener, logger, key_mode, bak_mode, mods_mode, mods_only,
-                 multiline, vis_shift, vis_space, recent_thr, compr_cnt, ignore, pango_ctx):
+                 multiline, vis_shift, vis_space, recent_thr, compr_cnt, ignore, pango_ctx, special_chars):
         self.key_mode = key_mode
         self.bak_mode = bak_mode
         self.mods_mode = mods_mode
@@ -154,6 +155,7 @@ class LabelManager(object):
         self.data = []
         self.enabled = True
         self.mods_only = mods_only
+	self.special_chars = special_chars
         self.multiline = multiline
         self.vis_shift = vis_shift
         self.vis_space = vis_space
@@ -373,7 +375,7 @@ class LabelManager(object):
                                key_repl.spaced, key_repl.repl + '\n')
 
         if mod == '':
-            if not self.mods_only:
+            if not self.mods_only or (self.special_chars and event.symbol in SPECIAL_CHARS):
                 repl = key_repl.repl
 
                 # switches
